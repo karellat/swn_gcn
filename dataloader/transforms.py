@@ -3,6 +3,7 @@ import torchvision
 from params import argument_parser
 import torchvision.transforms.functional as TF
 import PIL
+from torchvision.transforms import InterpolationMode
 
 
 class CircularMask(object):
@@ -60,8 +61,7 @@ class expandChannel(object):
 
 args = argument_parser()
 
-# INTER_METHOD = PIL.Image.NEAREST
-INTER_METHOD = PIL.Image.BILINEAR
+INTER_METHOD = InterpolationMode.BILINEAR
 
 
 T_MNIST = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),
@@ -73,8 +73,9 @@ T_MNIST = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),
 T_MNIST_ROT = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),
                                               torchvision.transforms.Resize((32, 32), interpolation=INTER_METHOD),
                                               torchvision.transforms.Normalize((0.1307,), (0.3081,)),
-                                              torchvision.transforms.RandomRotation(degrees=(-180, 180), expand=True, resample=INTER_METHOD),
-                                              # Rotation(args.single_rotation_angle, resample=INTER_METHOD),
+                                              torchvision.transforms.RandomRotation(degrees=(-180, 180),
+                                                                                    expand=True,
+                                                                                    interpolation=INTER_METHOD),
                                               torchvision.transforms.CenterCrop(32),
                                               CircularMask(),
                                               expandChannel()])
@@ -91,8 +92,7 @@ T_CIFAR10 = torchvision.transforms.Compose([
 T_CIFAR10_ROT = torchvision.transforms.Compose([
     torchvision.transforms.ToTensor(),
     torchvision.transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-    # Rotation(args.single_rotation_angle, resample=PIL.Image.NEAREST),
-    torchvision.transforms.RandomRotation(degrees=(-180, 180), expand=True, resample=PIL.Image.NEAREST),
+    torchvision.transforms.RandomRotation(degrees=(-180, 180), expand=True, interpolation=InterpolationMode.BILINEAR),
     torchvision.transforms.CenterCrop(32),
     CircularMask(),
 ])

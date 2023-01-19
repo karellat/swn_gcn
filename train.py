@@ -118,6 +118,8 @@ class Trainer():
     def test(self, model_path=None):
 
         # model.eval() not implemented. See Section A. in supplementary material for detail.
+        # TODO: model.eval has to be turned on otherwise BN works in training mode
+        model.eval()
         test_loss = 0
         correct = 0
         if args.single_rotation_angle is not None and not args.single_rotation_angle == 0:
